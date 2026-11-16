@@ -2,7 +2,7 @@
 
 Express API Gateway for the OpsSynk / NovaStack **Platform Team**. It is the single entry point for company APIs and forwards requests to **mocked** internal services (users, auth, notifications, platform). Everything runs locally: no database, no Docker, no cloud accounts.
 
-- **Owner:** Ishta
+- **Owner:** Ishita Srivastava
 - **Team:** Platform Team
 - **Stack:** Node.js 20, Express 5, Jest + Supertest, ESLint, GitHub Actions
 
