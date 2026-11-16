@@ -46,6 +46,23 @@ describe('upstream failures are normalized', () => {
     expect(JSON.stringify(res.body)).not.toMatch(/secret internal detail|crashed|stack trace/);
   });
 
+  it('does not expose internal error details in response headers', async () => {
+    const { app, services } = createTestApp();
+    services.upstream.setState('users', 'error');
+
+    const res = await request(app)
+      .get('/api/users')
+      .set('X-Request-ID', 'client-req-secure-1');
+
+    expect(res.status).toBe(502);
+    expect(res.headers['x-request-id']).toBe('client-req-secure-1');
+
+    expect(res.headers).not.toHaveProperty('x-error');
+    expect(res.headers).not.toHaveProperty('x-stack-trace');
+
+    expect(JSON.stringify(res.body)).not.toMatch(/stack|internal|crashed/i);
+  });
+
   it('normalizes failures on POST routes too', async () => {
     const { app, services } = createTestApp();
     services.upstream.setState('users', 'unavailable');
