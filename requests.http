@@ -1,0 +1,74 @@
+### Ready-made requests for the VS Code "REST Client" extension (humao.rest-client).
+### Start the gateway first (npm start), then click "Send Request" above any request.
+
+@baseUrl = http://localhost:3000
+
+### Health
+GET {{baseUrl}}/health
+
+### List users
+GET {{baseUrl}}/api/users?limit=2
+
+### Filter users by role
+GET {{baseUrl}}/api/users?role=developer
+
+### Get one user
+GET {{baseUrl}}/api/users/2
+
+### Get a user that does not exist (404)
+GET {{baseUrl}}/api/users/999
+
+### Invalid user id (400)
+GET {{baseUrl}}/api/users/abc
+
+### Create a user
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "Katherine Johnson",
+  "email": "katherine@example.com",
+  "role": "developer"
+}
+
+### Create a user with invalid input (400)
+POST {{baseUrl}}/api/users
+Content-Type: application/json
+
+{
+  "name": "A",
+  "email": "not-an-email"
+}
+
+### Auth profile (mock token)
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer demo-token
+
+### Auth profile without a token (401)
+GET {{baseUrl}}/api/auth/profile
+
+### Notifications
+GET {{baseUrl}}/api/notifications?userId=1&unread=true
+
+### Platform status
+GET {{baseUrl}}/api/platform/status
+
+### Correlation ID: supply your own X-Request-ID
+GET {{baseUrl}}/health
+X-Request-ID: demo-request-001
+
+### Simulated upstream failure: unavailable (503)
+GET {{baseUrl}}/api/users
+X-Simulate-Upstream-Failure: unavailable
+
+### Simulated upstream failure: timeout (504)
+GET {{baseUrl}}/api/notifications
+X-Simulate-Upstream-Failure: timeout
+
+### Simulated upstream failure: bad response (502)
+GET {{baseUrl}}/api/auth/profile
+Authorization: Bearer demo-token
+X-Simulate-Upstream-Failure: error
+
+### Unknown route (404)
+GET {{baseUrl}}/nope
