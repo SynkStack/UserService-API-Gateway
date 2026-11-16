@@ -53,6 +53,21 @@ describe('request correlation IDs', () => {
     expect(res.body.requestId).toBe('client-req-error-1');
   });
 
+  it('preserves the request ID when an upstream service fails', async () => {
+    const { app, services } = createTestApp();
+
+    services.upstream.setState('users', 'unavailable');
+
+    const res = await request(app)
+      .get('/api/users')
+      .set('X-Request-ID', 'client-req-upstream-1');
+
+    expect(res.status).toBe(503);
+    expect(res.headers['x-request-id']).toBe('client-req-upstream-1');
+    expect(res.body.requestId).toBe('client-req-upstream-1');
+  });
+
+
   it('includes the ID on unknown routes', async () => {
     const { app } = createTestApp();
 
